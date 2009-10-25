@@ -1,0 +1,86 @@
+body {
+  font-family: Verdana,Arial,Helvetica,sans-serif;
+  color: #000;
+  margin: 0;
+  padding: 0 0 0 20px;
+}
+
+div, p {
+  padding: 4px;
+  margin: 0;
+}
+
+.mini {
+  font-size: 70%;
+  text-align: right;
+}
+
+label {
+  display: block;
+  float: left;
+  width: 100px;
+}
+
+input, textarea {
+  background: #fff;
+  color: #000;
+  border: 1px #ccc dashed;
+  margin: 2px;
+  padding: 2px;
+}
+
+input.button {
+  font-weight: bold;
+  background: #a96;
+  border: 1px #440 solid;
+  color: #fff;
+}
+
+input.hint {
+  color: #aaa;
+}
+
+textarea {
+  padding: 10px;
+  font-family: Verdana,Arial,Helvetica,sans-serif;
+  font-size: 80%;
+  background: #FFFFB6;
+}
+
+#header {
+  font-size: 140%;
+  background: #fff;
+  border: 1px #ccc solid;
+  padding: 8px;
+  margin: 0px;
+}
+
+.red {
+  font-size: 70%;
+  font-weight: bold;
+  color: #fff;
+  display: inline;
+  padding: 4px;
+  margin: 0 10px;
+  background: #c00;
+}
+
+#error {
+  font-size: 70%;
+  font-weight: bold;
+  padding: 2px;
+}
+
+#intro {
+  font-size: 90%;
+  padding: 16px 10px;
+  color: #444;
+}
+
+#logout {
+  font-size: 70%;
+  font-weight: bold;
+  padding: 2px;
+}
+
+
