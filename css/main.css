@@ -11,10 +11,6 @@ div, p {
   margin: 0;
 }
 
-.mini {
-  text-align: right;
-}
-
 label {
   display: block;
   float: left;
@@ -77,6 +73,10 @@ textarea {
 #logout {
   font-weight: bold;
   padding: 2px;
+}
+
+#footer {
+  text-align: center;
 }
 
 
