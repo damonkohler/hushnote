@@ -1,4 +1,5 @@
 body {
+  font-size: 0.7em;
   font-family: Verdana,Arial,Helvetica,sans-serif;
   color: #000;
   margin: 0;
@@ -11,7 +12,6 @@ div, p {
 }
 
 .mini {
-  font-size: 70%;
   text-align: right;
 }
 
@@ -48,7 +48,7 @@ textarea {
 }
 
 #header {
-  font-size: 140%;
+  font-size: 1.4em;
   background: #fff;
   border: 1px #ccc solid;
   padding: 8px;
@@ -56,7 +56,6 @@ textarea {
 }
 
 .red {
-  font-size: 70%;
   font-weight: bold;
   color: #fff;
   display: inline;
@@ -66,19 +65,17 @@ textarea {
 }
 
 #error {
-  font-size: 70%;
   font-weight: bold;
   padding: 2px;
 }
 
 #intro {
-  font-size: 90%;
+  font-size: 0.9em;
   padding: 16px 10px;
   color: #444;
 }
 
 #logout {
-  font-size: 70%;
   font-weight: bold;
   padding: 2px;
 }
