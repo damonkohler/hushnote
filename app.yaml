@@ -11,8 +11,6 @@ handlers:
   static_dir: lib
   mime_type: application/javascript
 
-- url: /pic
-  static_dir: pic
-
 - url: /.*
   script: hushnote.py
+  secure: always
