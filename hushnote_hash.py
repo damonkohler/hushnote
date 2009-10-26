@@ -9,7 +9,7 @@ source could change after they audit it. For example:
 2) Save the output of this script to a local file (such as ~/hushnote_hashes)
 3) In a crontab, compare the output of this script to your saved output.
 
-./site_verify.py | diff ~/hushnote_content_hash - &> /dev/null || \
+./hushnote_hash.py | diff ~/hushnote_content_hash - &> /dev/null || \
   echo hushnote has new content
 
 Assuming your crontab sends stdout to your email, this will alert you to any
