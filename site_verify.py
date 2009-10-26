@@ -3,7 +3,6 @@
 from BeautifulSoup import BeautifulSoup
 from hashlib import sha256
 import urllib2
-import sys
 
 HUSHNOTE_URL = 'http://hushnote.appspot.com/'
 
@@ -13,7 +12,7 @@ def get_source(url):
 
 
 def print_hash(url, source):
-  print '%s : %s' % (url, sha256(source).hexdigest())
+  print url, sha256(source).hexdigest()
 
 
 top_html = get_source(HUSHNOTE_URL)
