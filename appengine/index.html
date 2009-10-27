@@ -12,16 +12,40 @@
     <title>hushnote</title>
   </head>
   <body>
+    <div id="header"><b>hushnote</b></div>
     <div id="container">
-      <div id="header"><b>hushnote</b></div>
-      <div id="intro"><p>hushnote keeps secrets. Use
-      <a href="http://oplop.googlecode.com/">Oplop</a> to generate passwords
-      and hushnote to save Oplop labels and other secrets.</p></div>
-      <div id="oplop_help"><p>Press enter as you finish typing passwords or
-      labels.</p></div>
-      <div id="oplop_wrapper"></div>
+      <div id="intro"><p>
+        hushnote keeps secrets. Use
+        <a href="http://oplop.googlecode.com/">Oplop</a> to generate passwords
+        and hushnote to save Oplop labels and other secrets.
+      </p></div>
+      <div id="oplop_wrapper">
+        <form id="oplop_form" action="">
+          <div class="hint">
+            <input id="oplop_password" type="password" />
+            <label id="oplop_password_label" for="oplop_password">
+                oplop password</label>
+          </div>
+          <input id="oplop_submit" type="submit" value="ok" class="button" />
+          <p id="whatisoplop">
+            <a href="http://oplop.googlecode.com/">What's this?</a>
+          </p>
+        </form>
+      </div>
       <div id="hushnote_help"><p>Your notes will be saved automatically.</p></div>
-      <div id="hushnote_wrapper"></div>
+      <div id="hushnote_wrapper">
+        <form id="hushnote_form" action="">
+          <div class="hint">
+            <input id="hushnote_password" type="password" />
+            <label id="hushnote_password_label" for="hushnote_password">
+                hushnote password</label>
+          </div>
+          <input id="hushnote_submit" type="submit" value="ok" class="button" />
+          <p id="status">
+            <a href="http://hushnote.googlecode.com/">What's this?</a>
+          </p>
+        </form>
+      </div>
       <div id="footer">
       Copyright (c) 2009 <a target="_blank" href="http://www.damonkohler.com">Damon Kohler</a>
       - hushnote is <a target="_blank" href="http://en.wikipedia.org/wiki/Host-proof_hosting">host-proof</a>,

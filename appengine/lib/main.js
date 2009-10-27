@@ -25,83 +25,66 @@ OTHER DEALINGS IN THE SOFTWARE.
 */
 $.fn.hint = function () {
   return this.each(function () {
-    var elem = $(this);
-    elem.val(elem.attr("title"));
-    elem.addClass("hint");
-    elem.blur(function () {
-      if (elem.val() == "") {
-        elem.val(elem.attr("title"));
-        elem.addClass("hint");
+    var label = $(this);
+    var input = $("#" + label.attr("for"));
+    input.blur(function () {
+      if (input.val() == "") {
+        label.show();
       }
     });
-    elem.focus(function () {
-      if (elem.hasClass("hint")) {
-        elem.val("");
-        elem.removeClass("hint");
-      }
-      elem.select();
+    input.focus(function () {
+      label.hide();
+      input.select();
     });
-  });
-}
-
-$.fn.onEnter = function (func) {
-  return this.each(function () {
-    var elem = $(this);
-    elem.keydown(function (event) {
-      if (event.which == 13) {
-        try {
-          func();
-        } finally {
-          event.preventDefault();
-        }
-      }
-    });
+    label.click(function () { input.focus(); });
   });
 }
 
 hushnote = new Passpack.static({
 
   start: function () {
-    $("#intro").show();
-    $("#oplop_help").show();
     $("#hushnote_help").hide();
-    $("#oplop_wrapper").html("").append(
-      Q("DIV", {},
-        Q("P", {},
-          Q("INPUT", {id: "oplop_password", title: "oplop master password"})
-          .hint()
-          .onEnter(function () {
-            var field = $("#oplop_password");
-            if (hushnote.oplop_password == undefined) {
-              hushnote.oplop_password = field.val();
-              field.attr("title", "oplop label");
-              field.val("").focus().select();
-            } else {
-              field.val(oplop(hushnote.oplop_password, field.val()));
-              field.focus().select();
-            }
-          }),
-          Q("SPAN", {},
-            Q("A", {href: "http://oplop.googlecode.com/"}, "What's this?")
-          ).css({margin: "1em"})
-        )
-      )
-    );
-    $("#hushnote_wrapper").html("").append(
-      Q("DIV", {},
-        Q("P", {},
-          Q("INPUT", {id: "password", title: "hushnote password"})
-          .hint()
-          .onEnter(function () { hushnote.fetch(); }),
-          Q("SPAN", {id: "status"})
-        )
-      )
-    );
+    $("#oplop_form").submit(function () {
+      try {
+        var password_input = $("#oplop_password");
+        var password_label = $("#oplop_password_label");
+        hushnote.oplop_password = password_input.val();
+        var label_input = Q("INPUT", {id: "oplop_label"});
+        var label_label = Q(
+            "LABEL", {id: "oplop_label_label", 'for': "oplop_label"},
+            "oplop label");
+        password_input.replaceWith(label_input);
+        password_label.replaceWith(label_label);
+        label_label.hint();
+        label_input.focus();
+        $(this).unbind("submit");
+        $(this).submit(function () {
+          try {
+            var label_input = $("#oplop_label");
+            var generated_password = oplop(label_input.val(),
+                                           hushnote.oplop_password);
+            label_input.val(generated_password);
+            label_input.focus().select();
+          } finally {
+            return false;
+          }
+        });
+      } finally {
+        return false;
+      }
+    });
+    $("#hushnote_form").submit(function () {
+      try {
+        hushnote.fetch();
+      } finally {
+        return false;
+      }
+    });
   },
 
   fetch: function () {
-    this.password = $("#password").val();
-    this.key = Passpack.utils.hashx(this.password, 0, 1);
+    this.hushnote_password = $("#hushnote_password").val();
+    this.key = Passpack.utils.hashx(this.hushnote_password, 0, 1);
     $.ajax({
         url: "/fetch", type: "POST",
         data: {key: this.key}, complete: this.load});
@@ -110,7 +93,10 @@ hushnote = new Passpack.static({
   load: function (response) {
     if (response && response.responseText) {
       var decoded = Passpack.JSON.parse(response.responseText);
-      if (decoded.ok && decoded.key == hushnote.key) {
+      if (!decoded.ok) {
+        $("#status").html("").append(
+          Q("A", {href: decoded.url}, decoded.message));
+      } else if (decoded.key == hushnote.key) {
         hushnote.showNote(decoded.note);
         $("#status").html("").append(
           Q("A", {href: decoded.url}, decoded.message));
@@ -121,21 +107,39 @@ hushnote = new Passpack.static({
         hushnote.willReset = true;
         hushnote.flash("Password Changed");
       }
-      else {
-        $("#status").html("").append(
-          Q("A", {href: decoded.url}, decoded.message));
-      }
     } else {
       $("#status").text("Server Error");
     }
   },
 
+  showNote: function (note) {
+    $("#hushnote_help").show();
+    if (note != "-") {
+      note = Passpack.decode("AES", note, hushnote.hushnote_password);
+    } else {
+      note = "";
+    }
+    $("#hushnote_wrapper").html("").append(
+      Q("FORM", {action: ""},
+        Q("TEXTAREA", {id: "note"}, note)
+          .keydown(function () {
+            clearTimeout(hushnote.autosaveTimer);
+            hushnote.autosaveTimer = setTimeout("hushnote.save()", 1000);
+          })
+          .css({
+            height: ($(window).height()-250)+"px",
+            width: ($(window).width()-150)+"px"
+          }),
+        Q("BR"),
+        Q("DIV", {id: "status"})
+      )
+    );
+  },
+
   save: function () {
-    if (hushnote.willReset &&
-        prompt(
-            "You are about to overwrite an existing hushnote! " +
-            "Are you sure you want to reset your password and content?\n\n" +
-            "Type \"yes\" to confirm.") != "yes") {
+    var warning = "Your password has changed. If you continue, you will lose " +
+        "any existing hushnote content.\n\nType \"yes\" to confirm.";
+    if (hushnote.willReset && prompt(warning) != "yes") {
       location.reload();
       return;
     } else {
@@ -145,7 +149,8 @@ hushnote = new Passpack.static({
         url: "/save",
         type: "POST",
         data: {
-            note: Passpack.encode("AES", $("#note").val(), hushnote.password),
+            note: Passpack.encode("AES", $("#note").val(),
+                                  hushnote.hushnote_password),
             key: hushnote.key},
         complete: hushnote.saved
       });
@@ -164,31 +169,6 @@ hushnote = new Passpack.static({
     }
   },
 
-  showNote: function (note) {
-    $("#intro").hide();
-    $("#hushnote_help").show();
-    if (note != "-") {
-      note = Passpack.decode("AES", note, hushnote.password);
-    } else {
-      note = "";
-    }
-    $("#hushnote_wrapper").html("").append(
-      Q("P", {},
-        Q("TEXTAREA", {id: "note"}, note)
-          .keydown(function () {
-            clearTimeout(hushnote.autosaveTimer);
-            hushnote.autosaveTimer = setTimeout("hushnote.save()", 1000);
-          })
-          .css({
-            height: ($(window).height()-250)+"px",
-            width: ($(window).width()-150)+"px"
-          }),
-        Q("BR"),
-        Q("DIV", {id: "status"})
-      )
-    );
-  },
-
   flash: function (message) {
     $("#status").append(
       Q("SPAN", {id: "message", 'class': "red"}, message)
@@ -200,6 +180,8 @@ hushnote = new Passpack.static({
 
 $(document).ready(function () {
   hushnote.start();
+  $("#oplop_password_label").hint();
+  $("#hushnote_password_label").hint();
 });
 
 

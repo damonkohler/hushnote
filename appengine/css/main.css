@@ -1,53 +1,52 @@
 body {
   font-size: 0.7em;
-  font-family: Verdana,Arial,Helvetica,sans-serif;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
   color: #000;
   margin: 0;
-  padding: 0 0 0 20px;
 }
 
 div, p {
-  padding: 4px;
+  padding: 0;
   margin: 0;
 }
 
-label {
-  display: block;
-  float: left;
-  width: 100px;
+form {
+  margin: 0;
+  padding: 1em;
 }
 
 input, textarea {
   background: #fff;
   color: #000;
   border: 1px #ccc dashed;
-  margin: 2px;
-  padding: 2px;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
 input.button {
   font-weight: bold;
-  background: #a96;
+  background: #ccc;
   border: 1px #440 solid;
   color: #fff;
 }
 
-input.hint {
-  color: #aaa;
+div.hint {
+  position: relative;
+  float: left;
 }
 
-textarea {
-  padding: 10px;
-  font-family: Verdana,Arial,Helvetica,sans-serif;
-  background: #f5f5f5;
+div.hint label {
+  position: absolute;
+  top: 0.5em;
+  left: 1em;
+  color: #aaa;
 }
 
 #header {
   font-size: 1.4em;
   background: #fff;
-  border: 1px #ccc solid;
-  padding: 8px;
-  margin: 0px;
+  border: 0.1em #ccc solid;
+  padding: 0.5em;
+  margin: 0.5em;
 }
 
 #message {
@@ -70,13 +69,14 @@ textarea {
   color: #444;
 }
 
-#status {
-  font-weight: bold;
-  padding: 2px;
-}
-
 #footer {
   text-align: center;
 }
 
+#container {
+  padding: 0 2em;
+}
 
+#whatisoplop, #status {
+  padding: 0.5em;
+}
