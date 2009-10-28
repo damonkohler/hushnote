@@ -10,7 +10,7 @@ from google.appengine.ext.webapp.util import login_required
 
 class Note(db.Model):
   user = db.UserProperty()
-  content = db.BlobProperty()
+  content = db.TextProperty()
   hushkey = db.StringProperty(multiline=True)
   date = db.DateTimeProperty(auto_now=True)
 
