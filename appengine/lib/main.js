@@ -30,20 +30,19 @@ $.fn.tooltip = function (content) {
       position: {
         corner: {
           target: "center",
-          tooltip: "bottomLeft",
-        },
+          tooltip: "bottomLeft"
+        }
       },
       style: {
         name: "cream",
-        border: {
-          width: 2,
-          radius: 4,
-        },
-        tip: "bottomLeft",
+        border: {width: 2, radius: 4},
+        tip: "bottomLeft"
       },
-      show: {ready: true},
-      hide: 'click',
-      });
+      show: {ready: true}
+    });
+    $(this).unbind("mousemove.qtip");
+    $(this).unbind("mouseout.qtip");
+    $(this).unbind("mouseover.qtip");
   });
 }
 
@@ -51,7 +50,7 @@ $.fn.hint = function (content) {
   return this.each(function () {
     var label = $(this);
     var input = $("#" + label.attr("for"));
-    input.tooltip(content).qtip("show");
+    input.tooltip(content);
     input.blur(function () {
       if (input.val() == "") {
         label.show();
@@ -60,6 +59,7 @@ $.fn.hint = function (content) {
     });
     input.focus(function () {
       label.hide();
+      input.qtip("hide");
       input.select();
     });
     input.keydown(function () {
