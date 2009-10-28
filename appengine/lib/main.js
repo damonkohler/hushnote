@@ -150,13 +150,19 @@ hushnote = new Passpack.static({
     } else {
       note = "";
     }
+
+    var autosave = function () {
+      clearTimeout(hushnote.autosaveTimer);
+      hushnote.autosaveTimer = setTimeout("hushnote.save()", 1000);
+    }
+
     $("#hushnote_wrapper").html("").append(
       Q("FORM", {action: ""},
         Q("TEXTAREA", {id: "note"}, note)
-          .keydown(function () {
-            clearTimeout(hushnote.autosaveTimer);
-            hushnote.autosaveTimer = setTimeout("hushnote.save()", 1000);
-          })
+          // Trigger on all events to catch as many key presses as possible.
+          .keydown(autosave)
+          .keypress(autosave)
+          .keyup(autosave)
           .css({
             height: ($(window).height()-300)+"px",
             width: ($(window).width()-75)+"px"
