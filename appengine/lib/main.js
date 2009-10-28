@@ -23,18 +23,48 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 */
-$.fn.hint = function () {
+$.fn.tooltip = function (content) {
+  return this.each(function () {
+    $(this).qtip({
+      content: content,
+      position: {
+        corner: {
+          target: "center",
+          tooltip: "bottomLeft",
+        },
+      },
+      style: {
+        name: "cream",
+        border: {
+          width: 2,
+          radius: 4,
+        },
+        tip: "bottomLeft",
+      },
+      show: {ready: true},
+      hide: 'click',
+      });
+  });
+}
+
+$.fn.hint = function (content) {
   return this.each(function () {
     var label = $(this);
     var input = $("#" + label.attr("for"));
+    input.tooltip(content).qtip("show");
     input.blur(function () {
       if (input.val() == "") {
         label.show();
+        input.qtip("show");
       }
     });
     input.focus(function () {
       label.hide();
       input.select();
+    });
+    input.keydown(function () {
+      label.hide();
+      input.qtip("hide");
     });
     label.click(function () { input.focus(); });
   });
@@ -55,7 +85,8 @@ hushnote = new Passpack.static({
             "oplop label");
         password_input.replaceWith(label_input);
         password_label.replaceWith(label_label);
-        label_label.hint();
+        label_label.hint(
+            "Type in a Oplop label here, then press enter.");
         label_input.focus();
         $(this).unbind("submit");
         $(this).submit(function () {
@@ -127,8 +158,8 @@ hushnote = new Passpack.static({
             hushnote.autosaveTimer = setTimeout("hushnote.save()", 1000);
           })
           .css({
-            height: ($(window).height()-250)+"px",
-            width: ($(window).width()-150)+"px"
+            height: ($(window).height()-300)+"px",
+            width: ($(window).width()-75)+"px"
           }),
         Q("BR"),
         Q("DIV", {id: "status"})
@@ -180,8 +211,11 @@ hushnote = new Passpack.static({
 
 $(document).ready(function () {
   hushnote.start();
-  $("#oplop_password_label").hint();
-  $("#hushnote_password_label").hint();
+  $("#oplop_password").focus();
+  $("#oplop_password_label").hint(
+      "Type in your Oplop master password here, then press enter.");
+  $("#hushnote_password_label").hint(
+      "Type in your hushnote password here, then press enter.");
 });
 
 

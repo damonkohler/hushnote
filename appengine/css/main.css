@@ -63,14 +63,20 @@ div.hint label {
   padding: 1em;
 }
 
-#intro, #oplop_help, #hushnote_help {
-  font-size: 0.9em;
-  padding: 5px 5px;
+#intro {
+  padding: 1em;
+  color: #444;
+  text-align: right;
+}
+
+#hushnote_help {
+  padding: 1em;
   color: #444;
 }
 
 #footer {
   text-align: center;
+  font-size: 0.7em;
 }
 
 #container {
