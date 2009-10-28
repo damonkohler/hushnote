@@ -86,7 +86,7 @@ hushnote = new Passpack.static({
         password_input.replaceWith(label_input);
         password_label.replaceWith(label_label);
         label_label.hint(
-            "Type in a Oplop label here, then press enter.");
+            "Type in an Oplop label here, then press enter.");
         label_input.focus();
         $(this).unbind("submit");
         $(this).submit(function () {
