@@ -62,9 +62,11 @@ $.fn.hint = function (content) {
       input.qtip("hide");
       input.select();
     });
-    input.keydown(function () {
-      label.hide();
-      input.qtip("hide");
+    input.keydown(function (event) {
+      if (event.which != 9) {
+        label.hide();
+        input.qtip("hide");
+      }
     });
     label.click(function () { input.focus(); });
   });
@@ -73,33 +75,44 @@ $.fn.hint = function (content) {
 hushnote = new Passpack.static({
 
   start: function () {
-    $("#hushnote_help").hide();
     $("#oplop_form").submit(function () {
       try {
         var password_input = $("#oplop_password");
         var password_label = $("#oplop_password_label");
-        hushnote.oplop_password = password_input.val();
-        var label_input = Q("INPUT", {id: "oplop_label"});
-        var label_label = Q(
-            "LABEL", {id: "oplop_label_label", 'for': "oplop_label"},
-            "oplop label");
-        password_input.replaceWith(label_input);
-        password_label.replaceWith(label_label);
-        label_label.hint(
-            "Type in an Oplop label here, then press enter.");
-        label_input.focus();
-        $(this).unbind("submit");
-        $(this).submit(function () {
-          try {
-            var label_input = $("#oplop_label");
-            var generated_password = oplop(label_input.val(),
-                                           hushnote.oplop_password);
-            label_input.val(generated_password);
-            label_input.focus().select();
-          } finally {
-            return false;
-          }
-        });
+        if (hushnote.oplop_password == undefined) {
+          password_input.qtip("api").updateContent(
+              "Type your Oplop master password again to confirm.");
+          password_input.qtip("show");
+          hushnote.oplop_password = password_input.val();
+          password_input.val("");
+        } else if (hushnote.oplop_password != password_input.val()) {
+           password_input.qtip("api").updateContent(
+              "Your entries did not match. Please, try again.");
+           password_input.qtip("show");
+           password_input.val("");
+           hushnote.oplop_password = undefined;
+        } else {
+          var label_input = $.INPUT({id: "oplop_label"});
+          var label_label = $.LABEL(
+              {id: "oplop_label_label", 'for': "oplop_label"}, "oplop label");
+          password_input.replaceWith(label_input);
+          password_label.replaceWith(label_label);
+          label_input.focus();
+          label_label.hint(
+              "Type in an Oplop label here, then press enter.");
+          $(this).unbind("submit");
+          $(this).submit(function () {
+            try {
+              var label_input = $("#oplop_label");
+              var generated_password = oplop(label_input.val(),
+                                             hushnote.oplop_password);
+              label_input.val(generated_password);
+              label_input.focus().select();
+            } finally {
+              return false;
+            }
+          });
+        }
       } finally {
         return false;
       }
@@ -126,15 +139,15 @@ hushnote = new Passpack.static({
       var decoded = Passpack.JSON.parse(response.responseText);
       if (!decoded.ok) {
         $("#status").html("").append(
-          Q("A", {href: decoded.url}, decoded.message));
+          $.A({href: decoded.url}, decoded.message));
       } else if (decoded.key == hushnote.key) {
         hushnote.showNote(decoded.note);
         $("#status").html("").append(
-          Q("A", {href: decoded.url}, decoded.message));
+          $.A({href: decoded.url}, decoded.message));
       } else if (decoded.key != hushnote.key) {
         hushnote.showNote("-");
         $("#status").html("").append(
-          Q("A", {href: decoded.url}, decoded.message));
+          $.A({href: decoded.url}, decoded.message));
         hushnote.willReset = true;
         hushnote.flash("Password Changed");
       }
@@ -153,8 +166,8 @@ hushnote = new Passpack.static({
 
     var autosave =
     $("#hushnote_wrapper").html("").append(
-      Q("FORM", {action: ""},
-        Q("TEXTAREA", {id: "note"}, note)
+      $.FORM({action: ""},
+        $.TEXTAREA({id: "note"}, note)
           .keydown(function () {
              clearTimeout(hushnote.autosaveTimer);
              hushnote.autosaveTimer = setTimeout("hushnote.save()", 1000);
@@ -163,8 +176,8 @@ hushnote = new Passpack.static({
             height: ($(window).height()-300)+"px",
             width: ($(window).width()-75)+"px"
           }),
-        Q("BR"),
-        Q("DIV", {id: "status"})
+        $.BR(),
+        $.DIV({id: "status"})
       )
     );
   },
@@ -204,7 +217,7 @@ hushnote = new Passpack.static({
 
   flash: function (message) {
     $("#status").append(
-      Q("SPAN", {id: "message", 'class': "red"}, message)
+      $.SPAN({id: "message", 'class': "red"}, message)
     );
     $("#message").fadeOut(2000, function () { $("#message").remove() });
   }

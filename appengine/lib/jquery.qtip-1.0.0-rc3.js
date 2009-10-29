@@ -235,6 +235,7 @@
             // Define afterShow callback method
             function afterShow()
             {
+              self.elements.tooltip.css({ opacity: '' });
                // Call API method and focus if it isn't static
                if(self.options.position.type !== 'static') self.focus();
                self.onShow.call(self, event);
@@ -311,7 +312,10 @@
             if(returned === false) return self;
 
             // Define afterHide callback method
-            function afterHide(){ self.onHide.call(self, event); };
+            function afterHide(){
+                self.elements.tooltip.css({ opacity: '', height: '' });
+                self.onHide.call(self, event);
+            };
 
             // Maintain toggle functionality if enabled
             self.cache.toggle = 0;

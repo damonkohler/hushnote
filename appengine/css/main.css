@@ -72,6 +72,7 @@ div.hint label {
 #hushnote_help {
   padding: 1em;
   color: #444;
+  display: none;
 }
 
 #footer {
