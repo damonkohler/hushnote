@@ -216,10 +216,22 @@ hushnote = new Passpack.static({
   },
 
   flash: function (message) {
-    $("#status").append(
-      $.SPAN({id: "message", 'class': "red"}, message)
-    );
-    $("#message").fadeOut(2000, function () { $("#message").remove() });
+    var showMessage = function () {
+      var when = new Date();
+      var dateStamp =
+          (when.getMonth() + 1) + '/' + when.getDate() + '/' + when.getFullYear();
+      var timeStamp = when.toLocaleTimeString();
+      $("#status").append($.SPAN({id: "message"},
+                          message + " " + dateStamp + " " + timeStamp));
+    }
+    if ($("#message").length !== 0) {
+      $("#message").fadeOut(1000, function () {
+        $("#message").remove();
+        showMessage();
+      });
+    } else {
+      showMessage();
+    }
   }
 
 });
