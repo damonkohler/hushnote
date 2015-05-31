@@ -1,0 +1,1 @@
+[hushnote](https://hushnote.appspot.com/) uses client side encryption to save messages.
